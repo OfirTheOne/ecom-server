@@ -1,0 +1,395 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Ecom Platform API",
+    "version" : "1.0.0",
+    "title" : "Ecom Platform API",
+    "contact" : {
+      "email" : "you@your-company.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/O-Glaxy/ecom/1.0.0",
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured Admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/product/filter" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "filter products, view catalog",
+        "description" : "By passing in the appropriate options, you can search for\navailable products in the system\n",
+        "operationId" : "filterProducts",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "description" : "pass an optional search string for looking up on product name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "price_range",
+          "in" : "query",
+          "description" : "string in format of /\\d:\\d/, pass an optional price range string for filtering by product parice",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "number of records to skip for pagination",
+          "required" : false,
+          "type" : "integer",
+          "minimum" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "maximum number of records to return",
+          "required" : false,
+          "type" : "integer",
+          "maximum" : 50,
+          "minimum" : 0,
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductItem"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/product/{productId}" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "get a product by id",
+        "description" : "By passing in the appropriate options, you can search for\navailable products in the system\n",
+        "operationId" : "getFilterById",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "description" : "pass the wanted product id",
+          "required" : true,
+          "type" : "string",
+          "format" : "ObjectID"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/ProductItem"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/cart/all" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "get the user's cart",
+        "description" : "Get the user's cart\n",
+        "operationId" : "getCart",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/Cart"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/cart/add" : {
+      "post" : {
+        "tags" : [ "developers" ],
+        "summary" : "add item to cart",
+        "description" : "By passing in the appropriate options, you can search for\navailable products in the system\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "addCartItemBody",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/addCartItemBody"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "user's cart",
+            "schema" : {
+              "$ref" : "#/definitions/Cart"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/cart/" : {
+      "put" : {
+        "tags" : [ "developers" ],
+        "summary" : "update item in cart",
+        "description" : "By passing in the appropriate options, you can search for\navailable products in the system\n",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "updateCartItemBody",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/updateCartItemBody"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "user's cart",
+            "schema" : {
+              "$ref" : "#/definitions/Cart"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "ProductItem" : {
+      "type" : "object",
+      "required" : [ "_id", "active", "category", "color_options", "color_price_factor", "currency", "description", "images_url", "item_index", "name", "price", "size_options", "size_price_factor", "sku", "sub_category" ],
+      "properties" : {
+        "_id" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1b84063688674dbd9df47"
+        },
+        "item_index" : {
+          "type" : "number",
+          "example" : 2.0
+        },
+        "price" : {
+          "type" : "number",
+          "example" : 129.99
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "חולצת ריצה מבד מנדף Speedwick"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "חולצת ריצה מבד מנדף בטכנולוגית Speedwick עם הדפס לוגו המותג. לחולצה מפתח צוואר עגול ושרוולים קצרים."
+        },
+        "currency" : {
+          "type" : "string",
+          "example" : "ISL"
+        },
+        "sku" : {
+          "type" : "string",
+          "example" : "A0000001"
+        },
+        "color_options" : {
+          "type" : "array",
+          "example" : [ "כחול", "צהוב" ],
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "color_price_factor" : {
+          "type" : "array",
+          "example" : [ 1, 1 ],
+          "items" : {
+            "type" : "number"
+          }
+        },
+        "size_options" : {
+          "type" : "array",
+          "example" : [ "XS", "S", "M", "L", "XL" ],
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "size_price_factor" : {
+          "type" : "array",
+          "example" : [ 1, 1, 1, 1, 1 ],
+          "items" : {
+            "type" : "number"
+          }
+        },
+        "category" : {
+          "$ref" : "#/definitions/ProductCategory"
+        },
+        "sub_category" : {
+          "$ref" : "#/definitions/ProductSubCategory"
+        },
+        "images_url" : {
+          "type" : "array",
+          "example" : [ "https://media.terminalx.com/pub/media/catalog/product/cache/image/e9c3970ab036de70892d86c6d221abfe/x/5/x569900015-11586184766.jpg", "https://media.terminalx.com/pub/media/catalog/product/cache/image/e9c3970ab036de70892d86c6d221abfe/x/5/x569900015-41586184766.jpg" ],
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "active" : {
+          "type" : "boolean",
+          "example" : true
+        }
+      }
+    },
+    "ProductCategory" : {
+      "required" : [ "_id", "description", "name" ],
+      "properties" : {
+        "_id" : {
+          "type" : "string",
+          "format" : "ObjctID",
+          "example" : "5eb19c0df940203ef2719c4c"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "ACME Corporation"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "ACME Corporation"
+        }
+      }
+    },
+    "ProductSubCategory" : {
+      "required" : [ "_id", "description", "name" ],
+      "properties" : {
+        "_id" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1a13cf940203ef2719c4e"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "ACME Corporation"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "ACME Corporation"
+        }
+      }
+    },
+    "CartItem" : {
+      "type" : "object",
+      "required" : [ "item_id", "product", "quantity", "selected_operations" ],
+      "properties" : {
+        "item_id" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1b84063688674dbd9df47"
+        },
+        "product" : {
+          "$ref" : "#/definitions/ProductItem"
+        },
+        "quantity" : {
+          "type" : "number",
+          "example" : 2.0
+        },
+        "selected_operations" : {
+          "$ref" : "#/definitions/CartItemOptions"
+        }
+      }
+    },
+    "Cart" : {
+      "type" : "object",
+      "required" : [ "_id", "cart_items" ],
+      "properties" : {
+        "_id" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1b84063688674dbd9df47"
+        },
+        "cart_items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CartItem"
+          }
+        }
+      }
+    },
+    "CartItemOptions" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/CartItemOptions_inner"
+      }
+    },
+    "addCartItemBody" : {
+      "type" : "object",
+      "required" : [ "product", "quantity", "selected_operations" ],
+      "properties" : {
+        "product" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1b84063688674dbd9df47"
+        },
+        "quantity" : {
+          "type" : "number",
+          "example" : 2.0
+        },
+        "selected_operations" : {
+          "$ref" : "#/definitions/CartItemOptions"
+        }
+      }
+    },
+    "updateCartItemBody" : {
+      "type" : "object",
+      "required" : [ "item_id", "quantity", "selected_operations" ],
+      "properties" : {
+        "item_id" : {
+          "type" : "string",
+          "format" : "ObjectID",
+          "example" : "5eb1b84063688674dbd9df47"
+        },
+        "quantity" : {
+          "type" : "number",
+          "example" : 2.0
+        },
+        "selected_operations" : {
+          "$ref" : "#/definitions/CartItemOptions"
+        }
+      }
+    },
+    "CartItemOptions_inner" : {
+      "type" : "object",
+      "required" : [ "key", "value" ],
+      "properties" : {
+        "key" : {
+          "type" : "string",
+          "example" : "size"
+        },
+        "value" : {
+          "type" : "string",
+          "example" : "M"
+        }
+      }
+    }
+  }
+}

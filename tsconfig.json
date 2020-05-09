@@ -1,0 +1,31 @@
+{
+   "compilerOptions": {
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "pretty": true,
+      "sourceMap": true,
+      "target": "es6",
+      "outDir": "./dist",
+      "baseUrl": "./",
+      "importHelpers": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "typeRoots": [
+         "node_modules/@types",
+         "src/local-types"
+      ],
+      "paths":{
+         "general-types": ["./src/local-types/general"],
+         "@paypal/checkout-server-sdk": ["./src/local-types/paypal__checkout-server-sdk"],
+         "@paypal/paypalhttp": ["./src/local-types/paypal__paypalhttp"]
+       },
+   },
+  
+   "include": [
+      "src/**/*.ts",
+   ],
+   "exclude": [
+      "node_modules",
+      "src/local-types/**"
+   ]
+}

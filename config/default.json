@@ -1,0 +1,31 @@
+{
+    "MongoDB": {
+        "Configurations": {
+            "host": "127.0.0.1",
+            "user": "",
+            "password": "",
+            "port": "27017",
+            "database": "glory-ecom"
+        },
+        "currentVersion": 1
+    },
+    "Security": {
+        "Request": {
+            "Header": {
+                "key": "altman-app-auth",
+                "value": "HoJ20bK27$vjOmJ1fd1hEy0400FC19as"
+            },
+            "ForToken": {
+                "key": "Altman-App-Auth",
+                "value": "QYf1zDAT6weXkuZEuE12GksdWH2yKNkQBrO9ePh3dAxha7DW"
+            }
+        },
+        "AllowedOrigins": [
+            "localhost:4200",
+            "https://localhost:4200"
+        ]
+    },
+    "FB": {
+        "apiKey": "AIzaSyDuV5Fg4G3eJUAIwNAqOmDswsytlvG0Hc0"
+    }
+}
