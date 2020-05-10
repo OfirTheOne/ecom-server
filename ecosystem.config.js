@@ -7,7 +7,7 @@ module.exports = {
   deploy : {
     development : {
       key : '/Users/ofirg/server-keys/ecomm-dev-new.pem',
-      user : 'ubuntu',
+      user : 'sa_103659762652968566694',
       host : '35.208.32.48',
       ref  : 'origin/develop',
       repo : 'git@github.com:OfirTheOne/ecom-server.git',
