@@ -3,3 +3,4 @@
 /.env
 /logs/**
 *firebase-adminsdk*.json
+package-lock.json
