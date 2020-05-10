@@ -6,7 +6,7 @@ module.exports = {
 
   deploy : {
     development : {
-      key : '/Users/ofirg/server-keys/ecomm-dev.pem',
+      key : '/Users/ofirg/server-keys/ecomm-dev-new.pem',
       user : 'ubuntu',
       host : '35.208.32.48',
       ref  : 'origin/develop',
