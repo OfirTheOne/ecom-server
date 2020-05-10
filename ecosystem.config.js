@@ -12,7 +12,8 @@ module.exports = {
       ref  : 'origin/develop',
       repo : 'git@github.com:OfirTheOne/ecom-server.git',
       path : '~/server',
-      'post-deploy': "mkdir -p logs && cp ~/.env . npm i && npm run build && pm2 reload ecosystem.json --env development",
+      'post-deploy': "cp ~/.env . npm i && npm run build && pm2 reload ecosystem.json --env development",
+      // 'post-deploy': "mkdir -p logs && cp ~/.env . npm i && npm run build && pm2 reload ecosystem.json --env development",
       'pre-deploy-local' : "echo 'Deploying source to servers'",
     }
   }
