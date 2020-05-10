@@ -8,7 +8,7 @@ module.exports = {
     development : {
       key : '/Users/ofirg/server-keys/ecomm-dev.pem',
       user : 'ubuntu',
-      host : '104.198.192.76',
+      host : '35.208.32.48',
       ref  : 'origin/develop',
       repo : 'git@github.com:OfirTheOne/ecom-server.git',
       path : '~/server',
