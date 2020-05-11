@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: "ecomm--main-server",
-    script: '/dist/app/index.js',
+    script: './dist/app/index.js',
   }],
 
   deploy : {
