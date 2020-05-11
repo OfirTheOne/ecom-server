@@ -12,6 +12,9 @@ import { corsStage } from './app-stages/cors.app-stage';
 import { helmetStage } from './app-stages/helmet.app-stage';
 import { bodyParserStage } from './app-stages/body-parser.app-stage';
 import { swaggerUiStage } from './app-stages/swagger-ui.stage';
+import { notFoundStage } from './app-stages/not-found.stage';
+
+
 
 export class App {
     public app: express.Application;
@@ -37,6 +40,7 @@ export class App {
         // sessionStoreStage(this.app);
         this.initializeRoutes();
         this.app.use(errorMiddleware);
+        notFoundStage(this.app);
         this.initFirebase();
     }
 
