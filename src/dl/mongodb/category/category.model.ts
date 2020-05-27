@@ -7,7 +7,7 @@ import { BaseDocument } from './../../core/base-document'
 
 type SchemaKeys = keyof Category;
 
-const schema: Dictionary<any, SchemaKeys>&SchemaDefinition  = {
+const schema: Partial<Dictionary<any, SchemaKeys>>&SchemaDefinition  = {
     name: { type: String, required: true },  
     description: { type: String, required: true },  
     position: { type: Number, required: true },  

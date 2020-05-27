@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@o-galaxy/ether": "^1.2.0-beta.1",
+    "@o-galaxy/ether": "^1.2.1-beta.1",
+    "@o-galaxy/scheme-construct": "file:./scheme-construct-1.0.0.tgz",
     "@o-galaxy/guardian": "file:./o-galaxy-guardian-1.1.0-beta.1.tgz",
     "@paypal/checkout-server-sdk": "^1.0.2",
     "@types/braintree": "^2.22.2",

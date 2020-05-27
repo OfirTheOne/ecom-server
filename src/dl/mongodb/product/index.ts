@@ -1,3 +1,3 @@
 export { ProductModel, ProductDocument } from './product.model';
 export { Product, ProductSortableFields } from './product.entity';
-export { ProductRepository } from './product.repository';
+export { ProductRepository, FilterProductQueryOptions } from './product.repository';

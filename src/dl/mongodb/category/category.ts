@@ -3,6 +3,7 @@ export interface Category {
     name: string,
     description: string,
     position: number,
+    sub_categories?: Array<any> // virtual, populated at run time
 }
 
 

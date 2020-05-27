@@ -3,6 +3,7 @@ import { CategoryModel, CategoryDocument } from './category.model';
 import { Category } from './category';
 import { EntityRepository } from '../../core/entity-repository';
 import { Provider } from '@o-galaxy/ether/core';
+import { ObjectID } from 'mongodb';
 
 
 @Provider()
@@ -12,9 +13,9 @@ export class CategoryRepository extends EntityRepository<Category, CategoryDocum
         super(CategoryModel)
     }
     
-    public async getAllCategories() {
+    public async getAllItems(): Promise<Array<CategoryDocument>> {
         try {
-            const categories = await this.entityModel.aggregate([
+            let pipelines = [
                 { $match: {} },
                 {
                     $lookup: {
@@ -24,8 +25,43 @@ export class CategoryRepository extends EntityRepository<Category, CategoryDocum
                         as: 'sub_categories'
                     }
                 }
-            ]);
-            return categories;
+            ];
+            pipelines = pipelines.filter( pipe => pipe != undefined);
+            const queryResult = await this.entityModel.aggregate(pipelines);
+            if(!(queryResult?.length > 0)) {
+                // throw Error
+            } else {
+    
+                return  queryResult;//.map(c => this.projectSafeEntity(c)),
+            }    
+        } catch (error) {
+            throw error
+        }
+
+    }
+
+    public async getItemById(id: string): Promise<CategoryDocument>  {
+        try {
+                
+            let pipelines = [
+                { $match: { _id: new ObjectID(id)} },
+                {
+                    $lookup: {
+                        from: 'sub-categories',
+                        localField: '_id',
+                        foreignField: 'category',
+                        as: 'sub_categories'
+                    }
+                }
+            ];
+            pipelines = pipelines.filter( pipe => pipe != undefined);
+            const queryResult = await this.entityModel.aggregate(pipelines);
+            if(!(queryResult?.length > 0)) {
+                // throw Error
+            } else {
+    
+                return queryResult[0]// this.projectSafeEntity(queryResult[0])
+            }    
         } catch (error) {
             throw error
         }

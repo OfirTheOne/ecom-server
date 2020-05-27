@@ -19,9 +19,9 @@ export class LabelEntryRepository extends EntityRepository<LabelEntry, LabelEntr
                 [
                     'item_id',
                     // 'label_key',
-                    'label_key_id',
+                    'label_key',
                     // 'label_value',
-                    'label_value_id',
+                    'label_value',
                 ]
             ),
             (v) => v!= undefined && v!=null

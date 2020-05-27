@@ -6,7 +6,7 @@ import { AdminModule } from './v1/admin/admin.module';
 import { AuthHeaderGuard } from './v1/common/guards/auth-header.guard';
 
 @Module({
-    path: '/',
+    path: '/api',
     guards: [
         // AuthHeaderGuard
     ],

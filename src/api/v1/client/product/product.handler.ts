@@ -2,27 +2,42 @@ import * as _ from 'lodash';
 import { Provider } from '@o-galaxy/ether/core';
 import { ProductRepository } from '../../../../dl/mongodb/product/product.repository';
 import { InventoryService } from '../../../../services/inventory/inventory.service';
+import { BaseHandler } from '../../../../models/base-handler';
+
+
 @Provider()
-export class ProductHandler {
+export class ProductHandler extends BaseHandler {
 
 
     constructor(
-        private productRepository: ProductRepository,
-        private inventoryService: InventoryService
-    ) {}
+        protected productRepository: ProductRepository,
+        protected inventoryService: InventoryService
+    ) {
+        super();
+    }
     
+
     public async filterProducts(
         options: any,
-        skip: number, limit: number
+        skip: number, limit: number, flatResult: boolean = false
     ) {
-        const products = await this.productRepository.filterProducts(options, skip, limit);
-        const stockAmounts = await this.inventoryService.findStock(products.map(({sku}) => sku))
-        const productsWithStock = _.zip(stockAmounts, products).map(([stock, item]) => ({ item, stock }))
-        return productsWithStock;
+        try {
+            const { items, ...pagination} = await this.productRepository.filterProducts(options, skip, limit, flatResult, this._isAdmin);
+            const stockAmounts = await this.inventoryService.findStock(items.map(({sku}) => sku))
+            const productsWithStock = _.zip(stockAmounts, items).map(([stock, item]) => ({ item, stock }))
+            return { items: productsWithStock, ...pagination };
+            
+        } catch (error) {
+            throw error;
+        }
     }
 
-    public async getProductById() {
-
+    public async getProductById(id: string) {
+        try {
+            return await this.productRepository.findProductsById(id, false, true);
+        } catch (error) {
+            throw error;
+        }
     }
 
 }

@@ -24,9 +24,11 @@ export class ProductController {
     @Get('/:id')
     public async getProductById(req: Request, res: Response, next: NextFunction) {
         try {
-            
+            const productId = req.params.id; 
+            const result = await this.productHandler.getProductById(productId);
+            return res.send(result);
         } catch (error) {
-            
+            return next(error);
         }
     }
 

@@ -8,8 +8,8 @@ type SchemaKeys = keyof LabelEntry;
 
 const schema: Partial<Dictionary<any, SchemaKeys>>&SchemaDefinition  = {
     item_id: { type: ObjectID, required: true },
-    label_value: { type: String, required: true },
-    label_key: { type: String, required: true }
+    label_value: { type: ObjectID, required: true },
+    label_key: { type: ObjectID, required: true }
 }
 
 

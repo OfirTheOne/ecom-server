@@ -35,14 +35,22 @@ export class LabelAdminHandler {
             let label_value_id: ObjectID;
 
             let { label_value, label_key, item_id } = data
-            const labelEnum = await this.labelEnumRepository.entityModel.findOne({ label_key });
-            const value = labelEnum.label_values.find(({name}) => name == label_value);
+            const labelEnum = await this.labelEnumRepository.entityModel.findOne({ _id: label_key });
+
+            if(!labelEnum) {
+                throw Error('cant find label enum.')
+            }
+            const labelValue = labelEnum.label_values.find(({name, _id}) => _id == label_value);
+
+            if(!labelValue) {
+                throw Error('cant find label value.')
+            }
 
             item_id = new ObjectID(item_id);
-            label_value_id = value['_id'];
+            label_value_id = labelValue._id;
             label_key_id = labelEnum._id
 
-            return await this.labelEntryRepository.create({ item_id, label_value_id, label_key_id })
+            return await this.labelEntryRepository.create({ item_id, label_value: label_value_id, label_key: label_key_id })
         } catch (error) {
             throw error;
         }

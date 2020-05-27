@@ -7,7 +7,8 @@ type SchemaKeys = keyof LabelEnum;
 
 const schema: Dictionary<any, SchemaKeys>&SchemaDefinition  = {
     label_key: { type: String, required: true },
-    label_values: { type: [{ name: String, _id: true }], required: true },
+    display_label_key: { type: String, required: true },
+    label_values: { type: [{ name: String, /*_id: true*/ }], required: true },
 }
 
 export type LabelEnumDocument = LabelEnum & BaseDocument;
