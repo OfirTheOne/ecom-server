@@ -1,7 +1,18 @@
 import {App} from './app';
 
-const app = new App(
-    3000,
-);
+import { serve } from '@o-galaxy/ether/common';
 
-app.listen();
+
+const port = 3000;
+
+serve(App, port,() => {
+    console.log(`App listening on the port ${port}`);
+});
+
+/*
+serve(App, port,
+    () => {
+        console.log(`App listening on the port ${port}`);
+    }
+);
+*/
