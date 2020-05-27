@@ -2,13 +2,17 @@ import * as _ from 'lodash';
 import { Provider } from '@o-galaxy/ether/core';
 import { CategoryRepository } from '../../../../dl/mongodb/category/category.repository';
 import { Category } from '../../../../dl/mongodb/category';
+import { CategoryHandler } from '../../client/category/category.handler';
 @Provider()
-export class CategoryAdminHandler {
+export class CategoryAdminHandler extends CategoryHandler {
 
 
     constructor(
-        private categoryRepository: CategoryRepository,
-    ) {}
+        categoryRepository: CategoryRepository,
+    ) {
+        super(categoryRepository);
+        this.isAdmin = true;
+    }
     
     public async createCategory(category: Category) {
         try {
@@ -19,8 +23,5 @@ export class CategoryAdminHandler {
         }
     }
 
-    public async getProductById() {
-
-    }
 
 }
