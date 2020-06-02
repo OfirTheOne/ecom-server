@@ -9,7 +9,6 @@ import {ParseFilterProductParams, ParseDiscountProductBody} from './product.admi
 @Controller({ path: '/product' })
 export class ProductAdminController {
 
-
     constructor(
         private productAdminHandler: ProductAdminHandler,
     ) { }
@@ -58,6 +57,7 @@ export class ProductAdminController {
             return next(error);
         }
     }
+
 
     @Put('/:id')
     public async updateProduct(req: Request, res: Response, next: NextFunction) {
