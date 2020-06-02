@@ -18,6 +18,7 @@ export class PostCreateLabelEnumBody {
 
         @Required()
         @ArrayType
+        @Transform<PostCreateLabelEnumBody>(({value}) => (value as Array<any>).map(val => typeof val == 'string' ? ({ name: val}): val))
         label_values: Array<{ name: string }>;
 
     }

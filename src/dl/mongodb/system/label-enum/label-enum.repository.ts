@@ -19,6 +19,7 @@ export class LabelEnumRepository extends EntityRepository<LabelEnum, LabelEnumDo
             _.pick(
                 data, 
                 [
+                    'display_label_key',
                     'label_key',
                     'label_values',
                 ]
@@ -26,7 +27,7 @@ export class LabelEnumRepository extends EntityRepository<LabelEnum, LabelEnumDo
             (v) => v!= undefined && v!=null
         );
 
-        cleanData.label_values  = ([]||cleanData.label_values as LabelEnum['label_values']).map(({name}) => ({name})) ;
+        cleanData.label_values  = (cleanData.label_values as LabelEnum['label_values']||[]).map(({name}) => ({name})) ;
         return cleanData;
     }
     public projectSafeEntity(entity: LabelEnumDocument): Partial<LabelEnumDocument> {
