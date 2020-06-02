@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { ProductModel, ProductDocument } from './product.model'
 import { EntityRepository } from '../../core/entity-repository';
 import { ObjectID, ObjectId } from 'mongodb';
-import { Product, ProductSortableFields } from './product.entity';
+import { Product, ProductSortableFields, ProductRuntime } from './product.entity';
 import { Provider } from '@o-galaxy/ether/core';
 import { ArrayType } from 'general-types'
 import { parse } from '../../../utils/parse'
@@ -11,6 +11,8 @@ import { CategoryRepository, CategoryModel } from '../category';
 import { SubCategoryRepository, SubCategoryModel } from '../sub-category';
 import { DiscountModel } from '../system/discount';
 import { PutUpdateProductParams } from '../../../models/update-product-params';
+import { LabelEntryModel } from '../system/label-entry/label-entry.model';
+import { LabelEnumModel } from '../system/label-enum';
 
 
 
@@ -73,7 +75,7 @@ export class ProductRepository extends EntityRepository<Product, ProductDocument
     
     public async filterProducts(options: Partial<FilterProductQueryOptions>, 
         skip: number, limit: number, flat: boolean = false, isAdmin: boolean = false
-    ) : Promise<PaginationQueryResult<ProductDocument>> {
+    ) : Promise<PaginationQueryResult<ProductRuntime>> {
 
         let pipelines: Array<any> = [
             
@@ -121,18 +123,19 @@ export class ProductRepository extends EntityRepository<Product, ProductDocument
         } else {
             let { total_count, items } = queryResult[0]
             total_count = total_count[0]?.count;
+            
+            const projectedProducts = this.projectProducts(items)
+
             return {
-                items: items.map(p => this.projectSafeEntity(p)),
+                items: projectedProducts,
                 total_count, skip, limit
             }
         }        
 
     }
     
-    public async findProductsById(id: string, flat: boolean = false, isAdmin: boolean = false) : Promise<Partial<ProductDocument>> {
+    public async findProductsById(id: string, flat: boolean = false, isAdmin: boolean = false) : Promise<Partial<ProductRuntime>> {
 
-        const categoryRepository = new CategoryRepository();
-        const subCategoryRepository = new SubCategoryRepository();
 
         let pipelines: Array<any> = [
             
@@ -158,11 +161,19 @@ export class ProductRepository extends EntityRepository<Product, ProductDocument
             // throw Error
         } else {
 
-            return this.projectSafeEntity(queryResult[0])
+            const projectedProducts = this.projectProducts(queryResult)
+            return projectedProducts[0];
         }        
 
     }
     
+    private projectProducts(queryResults: Array<any>): Array<ProductRuntime> {
+        return queryResults.map(res => {
+            const projectedProduct  = this.projectSafeEntity(res) as ProductRuntime
+            projectedProduct.labels = this.handleProjectedLabelOnProduct(projectedProduct)
+            return projectedProduct;
+        })
+    }
 
 
     public ingestSafeEntity(data: any) {
@@ -207,7 +218,8 @@ export class ProductRepository extends EntityRepository<Product, ProductDocument
             'images_url',
             'active',
             'meta',
-            'discount'
+            'discount',
+            'labels'
         ])
     }
 
@@ -242,8 +254,40 @@ export class ProductRepository extends EntityRepository<Product, ProductDocument
                      ],
                     as: 'discount'
                 }
+            },
+            {
+                $lookup: {
+                    from: LabelEntryModel.collection.collectionName,
+                    let: { product_id: "$_id" },
+                    pipeline: [
+                        { $match:  {  $expr:  { $eq: [ "$item_id",  "$$product_id" ] } } },
+                        { 
+                            $lookup: {
+                                from: LabelEnumModel.collection.collectionName,
+                                let: { label_key_id: "$label_key" },
+                                pipeline: [
+                                    { $match:  {  $expr:  { $eq: [ "$_id",  "$$label_key_id" ] } } },
+                                    // { $sort: { expiry_date: -1 } }
+                                 ],
+                                as: 'label_key'
+                            }
+                        },
+                        { $unwind: { path: '$label_key' } },
+                        // { $sort: { expiry_date: -1 } }
+                     ],
+                    as: 'labels'
+                }
             }
         ]
     }
 
+    private handleProjectedLabelOnProduct(productRuntime: ProductRuntime) {
+        for(let label of productRuntime.labels||[]) {
+            const value_id = label.label_value;
+            const label_value = (label.label_key.label_values as Array<any>).find(({_id}) => value_id.toHexString() == _id.toHexString())
+            label['label_key_name'] = label.label_key?.label_key;
+            label['label_value_name'] = label_value?.name;
+        }
+        return productRuntime.labels||[];
+    }
 }
