@@ -5,6 +5,13 @@ import { Dictionary } from 'ts-essentials';
 
 import { parse } from '../../../utils';
 
+export interface ProductRunTimeAdditionalFields {
+
+    discount: Array<any>;
+    labels: Array<any>;
+}
+
+
 export interface ProductEntity {
     sku: string, 
     id_sku?: string,
@@ -25,6 +32,10 @@ export interface ProductEntity {
     meta: {[key: string]: any}
 }
 
+
+export interface ProductRuntime extends ProductEntity, ProductRunTimeAdditionalFields {
+
+}
 
 
 export class Product implements ProductEntity {
